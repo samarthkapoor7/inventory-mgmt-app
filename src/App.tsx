@@ -172,14 +172,81 @@ function App() {
               className="space-y-4"
             >
               <div>
-                
+                <label className="block text-sm font-medium text-gray-700">Name</label>
+                <input 
+                  type="text"
+                  name="name"
+                  defaultValue={editingItem?.name}
+                  required
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Category</label>
+                <input 
+                  type="text"
+                  name="category"
+                  defaultValue={editingItem?.category}
+                  required
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Quantity</label>
+                <input 
+                  type="number"
+                  name="quantity"
+                  defaultValue={editingItem?.quantity}
+                  required
+                  min="0"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Price</label>
+                <input 
+                  type="number"
+                  name="price"
+                  defaultValue={editingItem?.price}
+                  required
+                  min="0"
+                  step="0.01"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Description</label>
+                <textarea 
+                  name="description"
+                  defaultValue={editingItem?.description}
+                  required
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow=sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsModalOpen(false);
+                    setEditingItem(null);
+                  }}
+                  className="px-4 py-2 text-gray-700 hover:text-gray-900"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                >
+                  {editingItem ? 'Save Changes' : 'Add Item'}
+                </button>
               </div>
             </form>
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }
 
 export default App
