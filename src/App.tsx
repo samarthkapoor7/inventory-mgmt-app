@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react"
 import { InventoryItem, SortDirection } from "./types"
-import { AlertCircle, Pencil, Plus } from "lucide-react";
+import { AlertCircle, Pencil, Plus, Trash2 } from "lucide-react";
 
 function App() {
   const [items, setItems] = useState<InventoryItem[]>([
@@ -31,7 +31,26 @@ function App() {
     });
   }, [items, selectedCategory, sortDirection]);
 
-  
+  const handleAddItem = (item: Omit<InventoryItem, 'id'>) => {
+    const newItem = {
+      ...item,
+      id: Date.now().toString(),
+    };
+    setItems(prev => [...prev, newItem]);
+    setIsModalOpen(false);
+  };
+
+  const handleEditItem = (updatedItem: InventoryItem) => {
+    setItems(prev => prev.map(item =>
+      item.id === updatedItem.id ? updatedItem : item
+    ));
+    setEditingItem(null);
+    setIsModalOpen(false);
+  }
+
+  const handleDeleteItem = (id: string) => {
+    setItems(prev => prev.filter(item => item.id !== id));
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -114,7 +133,7 @@ function App() {
                           onClick={() => handleDeleteItem(item.id)}
                           className="text-red-600 hover:text-red-800"
                         >
-
+                          <Trash2 size={18} />
                         </button>
                       </div>
                     </td>
@@ -125,6 +144,40 @@ function App() {
           </div>
         </div>
       </div>
+
+      {IsModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">
+              {editingItem ? 'Edit Item' : 'Add New Item'}
+            </h2>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                const itemData = {
+                  name: formData.get('name') as string,
+                  category: formData.get('category') as string,
+                  quantity: parseInt(formData.get('quantity') as string),
+                  price: parseFloat(formData.get('price') as string),
+                  description: formData.get('description') as string,
+                };
+
+                if (editingItem) {
+                  handleEditItem({ ...itemData, id: editingItem.id });
+                } else {
+                  handleAddItem(itemData);
+                }
+              }}
+              className="space-y-4"
+            >
+              <div>
+                
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
